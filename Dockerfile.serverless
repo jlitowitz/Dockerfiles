@@ -1,0 +1,26 @@
+FROM amazonlinux:2
+
+RUN yum update -y \ 
+   &&  yum install shadow-utils git -y
+   
+
+RUN yum update -y \ 
+   &&  yum install python3 python3-pip -y
+
+RUN pip3 install awscli
+
+## install nodejs
+RUN curl -sL https://rpm.nodesource.com/setup_12.x | bash \
+   && yum install -y nodejs
+
+RUN groupadd -g 10566 jenkins \
+   && adduser -u 10566 -g 10566 -s /bin/bash -d /var/lib/jenkins -c 'Jenkins Continuous Integration Server' jenkins
+RUN mkdir /.npm \
+   && chown -R 10566:10566 "/.npm"
+
+USER jenkins
+
+ENV NPM_CONFIG_PREFIX=/.npm
+
+RUN npm install -g serverless
+ENV PATH="${NPM_CONFIG_PREFIX}/bin:${PATH}"

@@ -4,6 +4,6 @@ RUN apt-get update && apt-get install -y zip
 
 RUN yarn global add chrome-webstore-upload-cli lerna
 
-
+RUN groupadd -g 10566 jenkins && adduser -u 10566 -gid 10566 --shell /bin/bash --home /var/lib/jenkins -c 'Jenkins Continuous Integration Server' jenkins
 RUN mkdir /.cache && chmod 777 /.cache
 RUN mkdir /.yarn && chmod 777 /.yarn
